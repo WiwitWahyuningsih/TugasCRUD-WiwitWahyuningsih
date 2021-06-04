@@ -26,7 +26,6 @@ public class EditActivity extends AppCompatActivity {
 
     MhsParcel mhsParcel;
     boolean isNew = false;
-    int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +33,6 @@ public class EditActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit);
 
         mhsParcel = getIntent().getParcelableExtra("mhsEntity");
-        position = getIntent().getIntExtra("position", 0);
         isNew = (mhsParcel == null);
 
         initview();
@@ -42,12 +40,12 @@ public class EditActivity extends AppCompatActivity {
         initAction();
     }
 
-    void initview(){
+    void initview() {
         ActionBar actionBar = getSupportActionBar();
         // showing the back button in action bar
         assert actionBar != null;
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle(isNew? "Tambah":"Edit");
+        actionBar.setTitle(isNew ? "Tambah" : "Edit");
 
         edtAlamat = findViewById(R.id.edtAlamat);
         edtNama = findViewById(R.id.edtNama);
@@ -55,7 +53,7 @@ public class EditActivity extends AppCompatActivity {
         btnSimpan = findViewById(R.id.btnSimpan);
     }
 
-    void initData(){
+    void initData() {
         if (mhsParcel != null) {
             edtNama.setText(mhsParcel.getNama());
             edtNama.requestFocus();
@@ -67,21 +65,21 @@ public class EditActivity extends AppCompatActivity {
         }
     }
 
-    void doSave(){
+    void doSave() {
         if (isNew) mhsParcel = new MhsParcel();
         mhsParcel.setHp(edtPhone.getText().toString());
         mhsParcel.setNama(edtNama.getText().toString());
         mhsParcel.setAlamat(edtAlamat.getText().toString());
 
         MhsEntity mhsEntity = mhsParcel.toEntity();
-        if (isNew){
+        if (isNew) {
             mathDatabase.getMhsDao().insert(mhsEntity);
         } else {
             mathDatabase.getMhsDao().update(mhsEntity.getNama(), mhsEntity.getAlamat(), mhsEntity.getHp(), mhsEntity.getId());
         }
     }
 
-    void initAction(){
+    void initAction() {
         btnSimpan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,7 +89,6 @@ public class EditActivity extends AppCompatActivity {
                 Intent intent = getIntent();
                 intent.putExtra("mhsEntity", mhsParcel);
                 intent.putExtra("isNew", isNew);
-                intent.putExtra("position", position);
                 setResult(RESULT_OK, intent);
                 finish();
             }
